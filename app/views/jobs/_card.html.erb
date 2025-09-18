@@ -1,0 +1,76 @@
+<div class="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-200 overflow-hidden">
+  <!-- Gradient Header -->
+  <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-100">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="relative">
+          <%= image_tag job.company.logo, class: "w-12 h-12 rounded-xl shadow-sm border-2 border-white" %>
+          <div class="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white"></div>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-200">
+            <%= link_to job.title, job, class: "hover:underline" %>
+          </h3>
+          <p class="text-sm font-medium text-blue-600"><%= job.company.name %></p>
+        </div>
+      </div>
+      <% if job.employment_type.present? %>
+        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">
+          <%= job.employment_type %>
+        </span>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="p-6">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <!-- Job Details -->
+      <div class="flex-1">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Location -->
+          <div class="flex items-center text-gray-600">
+            <div class="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">Location</p>
+              <p class="text-sm font-semibold text-gray-900"><%= job.location %></p>
+            </div>
+          </div>
+
+          <!-- Published Date -->
+          <div class="flex items-center text-gray-600">
+            <div class="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">Posted</p>
+              <p class="text-sm font-semibold text-gray-900">
+                <%= job.published_at&.strftime("%b %d, %Y") || "Recently" %>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="flex-shrink-0">
+        <%= link_to job, class: "group/btn inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5" do %>
+          <span>View Details</span>
+          <svg class="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subtle Bottom Border -->
+  <div class="h-1 bg-gradient-to-r from-blue-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+</div>
