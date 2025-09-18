@@ -28,18 +28,26 @@ Before you begin, ensure you have the following installed:
 - **Ruby 3.4+** (check with `ruby --version`)
 - **PostgreSQL** (check with `psql --version`)
 
-### 1. Clone the Repository
+## ⚙️ Setup
+
+### 1) Fork this repository
+Click **Fork** on GitHub to create your own copy of the repo under your account.
+
+### 2) Clone your fork locally
 ```bash
-git clone <repository-url>
-cd rails-jobs-technical-test
+git clone https://github.com/<your-username>/technical_test_boilerplate.git
+cd technical_test_boilerplate
+
+# Optional (recommended): add the original repo as upstream
+git remote add upstream https://github.com/RubyOnRailsJobs/technical_test_boilerplate.git
 ```
 
-### 2. Install Dependencies
+### 3) Install dependencies
 ```bash
 bundle install
 ```
 
-### 3. Database Setup
+### 4) Database setup
 ```bash
 # Create the database
 rails db:create
@@ -51,13 +59,13 @@ rails db:migrate
 rails db:seed
 ```
 
-### 4. Start the Application
+### 5) Start the application
 ```bash
 # Start the Rails server
 bin/dev
 ```
 
-The application will be available at `http://localhost:3000`
+The application will be available at http://localhost:3000.
 
 ## 📊 Sample Data
 
