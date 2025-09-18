@@ -1,7 +1,8 @@
 # Rails Jobs Technical Test
 
 A Rails application boilerplate for technical testing, featuring a job board with companies and job listings.
-This is a Vibe coded app... yeah it's the future of our job to untangle the mess of vibe coding 🤣
+This is a Vibe coded app... yeah it's the future of our job to untangle the mess of vibe coding 🤣.
+
 
 ## 🚀 Tech Stack
 
@@ -95,10 +96,10 @@ If you prefer, propose your own enhancement.
 5. **Cleanup**: Auto-unpublish jobs after 30 days.
 6. **Job Alerts**: Let visitors create a “job alert” for new postings.
 7. **Scraping**: Create jobs/companies by pasting a link from another job board.
-8. **Realtime presence (Figma-style)** – Show mouse cursors of all connected visitors on the same page.  
-9. **Activity tracking (analytics)** – Record page views & key actions for admins to review usage (think “lightweight analytics”, not invasive tracking).
-10. **Job recommendations** – Suggest similar jobs using text similarity or tags.
-11. **AI Job Category Classifier** – Classify jobs into categories (sales, marketing, engineering, etc.)
+8. **Realtime presence (Figma-style)**: Show mouse cursors of all connected visitors on the same page.  
+9. **Activity tracking (analytics)**: Record page views & key actions for admins to review usage (think “lightweight analytics”, not invasive tracking).
+10. **Job recommendations**: Suggest similar jobs using text similarity or tags.
+11. **AI Job Category Classifier**: Classify jobs into categories (sales, marketing, engineering, etc.)
 
 ---
 
@@ -121,5 +122,5 @@ If you prefer, propose your own enhancement.
 
 
 ## 📄 License
-
+Created by [Ruby On Rails Jobs](https://www.ruby-on-rails-jobs.com)
 This project is for technical testing purposes only.
