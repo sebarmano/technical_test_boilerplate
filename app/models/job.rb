@@ -6,4 +6,8 @@ class Job < ApplicationRecord
   validates :company_id, presence: true
 
   scope :published, -> { where.not(published_at: nil) }
+
+  def publish!
+    update(published_at: Time.current)
+  end
 end
