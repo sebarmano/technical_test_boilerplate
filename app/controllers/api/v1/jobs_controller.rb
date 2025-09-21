@@ -12,10 +12,10 @@ class Api::V1::JobsController < ApiController
   def create
     @job = Job.new(job_params.except(:published))
     if @job.save
-      @job.publish! if publish_job?
+      publish_job
       render json: @job, status: :created, location: @job
     else
-      render json: @job.errors, status: :unprocessable_entity
+      render json: @job.errors, status: :unprocessable_content
     end
   end
 
@@ -50,7 +50,7 @@ class Api::V1::JobsController < ApiController
   end
 
   def filter_published?
-    params[:published].in? ["true", "yes"]
+    params[:published].in? ["true", "yes", true]
   end
 
   def job_params
@@ -58,10 +58,10 @@ class Api::V1::JobsController < ApiController
   end
 
   def publish_job
-    @job.publish! if publish_job?
+    Jobs::Publisher.new.publish(@job) if publish_job?
   end
 
   def publish_job?
-    job_params[:published] == "true"
+    job_params[:published].in? ["true", true]
   end
 end

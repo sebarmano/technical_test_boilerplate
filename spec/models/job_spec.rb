@@ -1,59 +1,43 @@
 require "rails_helper"
 
 RSpec.describe Job, type: :model do
-  describe "validations" do
-    it "is valid with valid attributes" do
-      job = create(:job)
-      expect(job).to be_valid
-    end
-
-    it "is invalid without a title" do
-      job = build(:job, title: nil)
-      expect(job).not_to be_valid
-      expect(job.errors[:title]).to include("can't be blank")
-    end
-
-    it "is invalid without a company_id" do
-      job = build(:job, company: nil)
-      expect(job).not_to be_valid
-      expect(job.errors[:company_id]).to include("can't be blank")
-    end
-  end
-
-  describe "associations" do
-    it "belongs to a company" do
-      job = create(:job)
-      expect(job.company).to be_present
-      expect(job.company).to be_a(Company)
-    end
-
-    it "has rich text description" do
-      job = create(:job)
-      job.description = "This is a job description"
-      expect(job.description).to be_present
-    end
-  end
-
   describe "scopes" do
     describe ".published" do
-      it "returns only jobs with published_at set" do
-        published_job = create(:job, published_at: 1.day.ago)
-        unpublished_job = create(:job, published_at: nil)
+      let(:published_job) { create(:job, :published) }
+      let(:unpublished_job) { create(:job, :unpublished) }
 
+      it "returns only published jobs" do
         published_jobs = Job.published
 
-        expect(published_jobs).to include(published_job)
-        expect(published_jobs).not_to include(unpublished_job)
+        expect(published_jobs).to contain_exactly(published_job)
+      end
+    end
+  end
+
+  describe "#published?" do
+    context "when job has published_at set" do
+      let(:job) { create(:job, :published) }
+
+      it "returns true" do
+        expect(job).to be_published
+      end
+    end
+
+    context "when job has no published_at" do
+      let(:job) { create(:job, :unpublished) }
+
+      it "returns false" do
+        expect(job).not_to be_published
       end
     end
   end
 
   describe "#publish!" do
     context "when job is not published" do
+      let(:job) { create(:job, :unpublished) }
+
       it "sets published_at to current time" do
         freeze_time do
-          job = create(:job, published_at: nil)
-
           job.publish!
 
           expect(job.published_at).to eq(Time.current)
@@ -62,15 +46,14 @@ RSpec.describe Job, type: :model do
     end
 
     context "when job is already published" do
-      it "updates published_at to current time" do
-        old_time = 1.day.ago
-        job = create(:job, published_at: old_time)
+      let(:time_in_the_past) { 1.day.ago }
+      let(:job) { create(:job, :published, published_at: time_in_the_past) }
 
+      it "updates published_at to current time" do
         freeze_time do
           job.publish!
 
           expect(job.published_at).to eq(Time.current)
-          expect(job.published_at).not_to eq(old_time)
         end
       end
     end

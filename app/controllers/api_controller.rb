@@ -1,7 +1,8 @@
 class ApiController < ApplicationController
+  protect_from_forgery with: :null_session
   before_action :authenticate_client
   before_action :require_json
-  rate_limit to: 1, within: 1.minute
+  rate_limit to: 10, within: 1.minute
 
   private
 

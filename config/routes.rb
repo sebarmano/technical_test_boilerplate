@@ -20,4 +20,6 @@ Rails.application.routes.draw do
       resources :jobs, except: [:new, :destroy]
     end
   end
+
+  mount MissionControl::Jobs::Engine, at: "/jobs"
 end

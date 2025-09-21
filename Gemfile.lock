@@ -44,6 +44,8 @@ GEM
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
+    active_event_store (1.2.1)
+      rails_event_store (>= 2.11.0)
     activejob (8.0.2.1)
       activesupport (= 8.0.2.1)
       globalid (>= 0.3.6)
@@ -72,6 +74,10 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
+    aggregate_root (2.16.0)
+      ruby_event_store (= 2.16.0)
+    arkency-command_bus (0.4.1)
+      concurrent-ruby
     ast (2.4.3)
     base64 (0.3.0)
     bcrypt_pbkdf (1.1.1)
@@ -163,6 +169,16 @@ GEM
       logger
     mini_mime (1.1.5)
     minitest (5.25.5)
+    mission_control-jobs (1.1.0)
+      actioncable (>= 7.1)
+      actionpack (>= 7.1)
+      activejob (>= 7.1)
+      activerecord (>= 7.1)
+      importmap-rails (>= 1.2.1)
+      irb (~> 1.13)
+      railties (>= 7.1)
+      stimulus-rails
+      turbo-rails
     msgpack (1.8.0)
     net-imap (0.5.10)
       date
@@ -248,6 +264,17 @@ GEM
     rails-html-sanitizer (1.6.2)
       loofah (~> 2.21)
       nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
+    rails_event_store (2.16.0)
+      activejob (>= 6.0)
+      activemodel (>= 6.0)
+      activesupport (>= 6.0)
+      aggregate_root (= 2.16.0)
+      arkency-command_bus (>= 0.4)
+      rails_event_store_active_record (= 2.16.0)
+      ruby_event_store (= 2.16.0)
+      ruby_event_store-browser (= 2.16.0)
+    rails_event_store_active_record (2.16.0)
+      ruby_event_store-active_record (= 2.16.0)
     railties (8.0.2.1)
       actionpack (= 8.0.2.1)
       activesupport (= 8.0.2.1)
@@ -301,6 +328,14 @@ GEM
     ruby-vips (2.2.4)
       ffi (~> 1.12)
       logger
+    ruby_event_store (2.16.0)
+      concurrent-ruby (~> 1.0, >= 1.1.6)
+    ruby_event_store-active_record (2.16.0)
+      activerecord (>= 6.0)
+      ruby_event_store (= 2.16.0)
+    ruby_event_store-browser (2.16.0)
+      rack
+      ruby_event_store (= 2.16.0)
     securerandom (0.4.1)
     solid_cable (3.0.12)
       actioncable (>= 7.2)
@@ -388,6 +423,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  active_event_store (~> 1.0)
   bootsnap
   brakeman
   debug
@@ -397,6 +433,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   kamal
+  mission_control-jobs
   pg (~> 1.1)
   propshaft
   puma (>= 5.0)
