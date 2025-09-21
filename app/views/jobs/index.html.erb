@@ -32,11 +32,14 @@
   <!-- Jobs List -->
   <div class="space-y-4">
     <%# display count of jobs %>
-    <p class="text-gray-600">Found <%= @jobs.count %> jobs</p>
+    <p class="text-gray-600">Found <%= @pagination[:total_count] %> jobs</p>
     <% @jobs.each do |job| %>
       <%= render "jobs/card", job: job %>
     <% end %>
   </div>
+
+  <!-- Pagination -->
+  <%= render 'shared/pagination', pagination: @pagination, params: params, additional_params: [:published] %>
 
   <!-- Empty State -->
   <% if @jobs.empty? %>

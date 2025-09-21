@@ -1,0 +1,39 @@
+<% additional_params ||= [] %>
+
+<% if pagination[:total_pages] > 1 %>
+  <div class="flex justify-center mt-8">
+    <nav class="flex items-center space-x-2">
+      <% if pagination[:current_page] > 1 %>
+        <%= link_to pagination_url_for(pagination[:current_page] - 1, params, additional_params),
+            class: "px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors" do %>
+          Previous
+        <% end %>
+      <% end %>
+      <% start_page = [pagination[:current_page] - 2, 1].max %>
+      <% end_page = [start_page + 4, pagination[:total_pages]].min %>
+      <% start_page = [end_page - 4, 1].max if end_page - start_page < 4 %>
+
+      <% (start_page..end_page).each do |page_num| %>
+        <% if page_num == pagination[:current_page] %>
+          <span class="px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-300 rounded-md">
+            <%= page_num %>
+          </span>
+        <% else %>
+          <%= link_to page_num, pagination_url_for(page_num, params, additional_params),
+              class: "px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors" %>
+        <% end %>
+      <% end %>
+      <% if pagination[:current_page] < pagination[:total_pages] %>
+        <%= link_to pagination_url_for(pagination[:current_page] + 1, params, additional_params),
+            class: "px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors" do %>
+          Next
+        <% end %>
+      <% end %>
+    </nav>
+  </div>
+  <div class="text-center mt-4 text-sm text-gray-600">
+    Showing <%= (pagination[:current_page] - 1) * pagination[:per_page] + 1 %> to
+    <%= [pagination[:current_page] * pagination[:per_page], pagination[:total_count]].min %>
+    of <%= pagination[:total_count] %> results
+  </div>
+<% end %>

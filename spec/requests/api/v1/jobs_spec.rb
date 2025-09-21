@@ -25,29 +25,83 @@ RSpec.describe "/api/v1/jobs", type: :request do
 
     context "with authentication" do
       context "when no filters are applied" do
-        it "returns all jobs by default" do
+        it "returns all jobs by default with pagination" do
           get "/api/v1/jobs", headers: headers
+          response_body = JSON.parse(response.body)
 
           expect(response).to have_http_status(:ok)
-          expect(JSON.parse(response.body).size).to eq(2)
+          expect(response_body).to have_key("jobs")
+          expect(response_body).to have_key("pagination")
+          expect(response_body["jobs"].size).to eq(2)
+          expect(response_body["pagination"]["total_count"]).to eq(2)
+          expect(response_body["pagination"]["current_page"]).to eq(1)
+          expect(response_body["pagination"]["per_page"]).to eq(10)
+        end
+      end
+
+      context "when pagination parameters are provided" do
+        before do
+          8.times { create(:job, company: company) }
+        end
+
+        it "returns paginated results" do
+          get "/api/v1/jobs", params: {page: 1, per_page: 5}, headers: headers
+          response_body = JSON.parse(response.body)
+
+          expect(response).to have_http_status(:ok)
+          expect(response_body["jobs"].size).to eq(5)
+          expect(response_body["pagination"]["current_page"]).to eq(1)
+          expect(response_body["pagination"]["per_page"]).to eq(5)
+          expect(response_body["pagination"]["total_count"]).to eq(10)
+          expect(response_body["pagination"]["total_pages"]).to eq(2)
+        end
+
+        it "returns second page results" do
+          get "/api/v1/jobs", params: {page: 2, per_page: 5}, headers: headers
+          response_body = JSON.parse(response.body)
+
+          expect(response).to have_http_status(:ok)
+          expect(response_body["jobs"].size).to eq(5)
+          expect(response_body["pagination"]["current_page"]).to eq(2)
+        end
+
+        it "limits per_page to maximum of 100" do
+          get "/api/v1/jobs", params: {per_page: 200}, headers: headers
+          response_body = JSON.parse(response.body)
+
+          expect(response_body["pagination"]["per_page"]).to eq(100)
+        end
+
+        it "uses default page 1 for invalid page numbers" do
+          get "/api/v1/jobs", params: {page: 0}, headers: headers
+          response_body = JSON.parse(response.body)
+
+          expect(response_body["pagination"]["current_page"]).to eq(1)
+        end
+
+        it "uses default per_page 10 when not specified" do
+          get "/api/v1/jobs", headers: headers
+          response_body = JSON.parse(response.body)
+
+          expect(response_body["pagination"]["per_page"]).to eq(10)
         end
       end
 
       context "when published parameter is provided" do
         it "filters published jobs when the published parameter is true" do
           get "/api/v1/jobs", params: {published: "true"}, headers: headers
-          jobs = JSON.parse(response.body)
+          response_body = JSON.parse(response.body)
 
           expect(response).to have_http_status(:ok)
-          expect(jobs.size).to eq(1)
-          expect(jobs.first["id"]).to eq(published_job.id)
+          expect(response_body["jobs"].size).to eq(1)
+          expect(response_body["jobs"].first["id"]).to eq(published_job.id)
         end
 
         it "returns all jobs when the published parameter is not true" do
           get "/api/v1/jobs", params: {published: "false"}, headers: headers
-          jobs = JSON.parse(response.body)
+          response_body = JSON.parse(response.body)
 
-          expect(jobs.size).to eq(2)
+          expect(response_body["jobs"].size).to eq(2)
           expect(response).to have_http_status(:ok)
         end
       end
@@ -57,21 +111,21 @@ RSpec.describe "/api/v1/jobs", type: :request do
           job_with_unique_title = create(:job, company: company, title: "Unique Position")
 
           get "/api/v1/jobs", params: {q: "Unique"}, headers: headers
-          jobs = JSON.parse(response.body)
+          response_body = JSON.parse(response.body)
 
           expect(response).to have_http_status(:ok)
-          expect(jobs.size).to eq(1)
-          expect(jobs.first["id"]).to eq(job_with_unique_title.id)
+          expect(response_body["jobs"].size).to eq(1)
+          expect(response_body["jobs"].first["id"]).to eq(job_with_unique_title.id)
         end
       end
 
       context "when sort parameter is provided" do
         it "sorts jobs when sort parameter is provided" do
           get "/api/v1/jobs", params: {sort: "title ASC"}, headers: headers
-          jobs = JSON.parse(response.body)
+          response_body = JSON.parse(response.body)
 
           expect(response).to have_http_status(:ok)
-          expect(jobs).to be_an(Array)
+          expect(response_body["jobs"]).to be_an(Array)
         end
       end
 

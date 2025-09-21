@@ -1,11 +1,11 @@
 class Job < ApplicationRecord
+  include Filterable
+
   belongs_to :company
   has_rich_text :description
 
   validates :title, presence: true
   validates :company_id, presence: true
-
-  scope :published, -> { where.not(published_at: nil) }
 
   def published?
     published_at.present?

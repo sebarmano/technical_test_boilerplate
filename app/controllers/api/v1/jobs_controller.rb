@@ -1,8 +1,16 @@
 class Api::V1::JobsController < ApiController
+  include Paginatable
+
   before_action :set_job, only: [:show, :update]
 
   def index
-    render json: filtered_jobs
+    filtered_jobs = build_filtered_jobs
+    result = paginate_collection(filtered_jobs)
+
+    render json: {
+      jobs: result[:collection],
+      pagination: result[:pagination]
+    }
   end
 
   def show
@@ -34,19 +42,14 @@ class Api::V1::JobsController < ApiController
     @job = Job.find(params[:id])
   end
 
-  def filtered_jobs
-    jobs = filter_published? ? Job.published : Job.all
-    jobs = jobs.where("title ILIKE ? OR location ILIKE ?", "%#{query}%", "%#{query}%") if query.present?
-    jobs = jobs.order(sort) if sort.present?
-    jobs
-  end
+  def build_filtered_jobs
+    filter_params = {
+      q: params[:q],
+      sort: params[:sort]
+    }
+    filter_params[:published_only] = true if filter_published?
 
-  def query
-    params[:q]
-  end
-
-  def sort
-    params[:sort]
+    Job.filtered(filter_params)
   end
 
   def filter_published?

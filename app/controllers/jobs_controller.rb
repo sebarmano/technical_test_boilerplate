@@ -1,10 +1,12 @@
 class JobsController < ApplicationController
+  include Paginatable
+
   def index
-    @query = params[:q]
-    @sort = params[:sort]
-    @jobs = Job.published
-    @jobs = @jobs.where("title ILIKE ? OR location ILIKE ?", "%#{@query}%", "%#{@query}%") if @query.present?
-    @jobs = @jobs.order(@sort) if @sort.present?
+    filtered_jobs = Job.filtered(params.merge(published_only: true))
+    result = paginate_collection(filtered_jobs)
+
+    @jobs = result[:collection]
+    @pagination = result[:pagination]
   end
 
   def show

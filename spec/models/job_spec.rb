@@ -1,17 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Job, type: :model do
-  describe "scopes" do
-    describe ".published" do
-      let(:published_job) { create(:job, :published) }
-      let(:unpublished_job) { create(:job, :unpublished) }
-
-      it "returns only published jobs" do
-        published_jobs = Job.published
-
-        expect(published_jobs).to contain_exactly(published_job)
-      end
-    end
+  it_behaves_like "filterable" do
+    let(:factory_name) { :job }
   end
 
   describe "#published?" do
