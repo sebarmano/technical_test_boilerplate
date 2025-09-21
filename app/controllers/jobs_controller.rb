@@ -2,7 +2,7 @@ class JobsController < ApplicationController
   def index
     @query = params[:q]
     @sort = params[:sort]
-    @jobs = Job.published
+    @jobs = Job.published.includes(company: {logo_attachment: :blob})
     @jobs = @jobs.where("title ILIKE ? OR location ILIKE ?", "%#{@query}%", "%#{@query}%") if @query.present?
     @jobs = @jobs.order(@sort) if @sort.present?
   end

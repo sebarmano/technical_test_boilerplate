@@ -10,6 +10,7 @@ class Job < ApplicationRecord
   def published?
     published_at.present?
   end
+  alias_method :published, :published?
 
   def publish!
     update(published_at: Time.current)
@@ -17,5 +18,11 @@ class Job < ApplicationRecord
 
   def unpublish!
     update(published_at: nil)
+  end
+
+  def as_json(options = {})
+    options[:except] ||= [:created_at, :updated_at]
+    options[:methods] ||= [:published]
+    super
   end
 end

@@ -162,12 +162,6 @@ RSpec.describe "/api/v1/jobs", type: :request do
           expect(job_response["location"]).to eq("San Francisco")
         end
 
-        it "sets location header" do
-          post "/api/v1/jobs", params: job_attributes.to_json, headers: headers
-
-          expect(response.headers["Location"]).to be_present
-        end
-
         context "when published is not true" do
           let(:not_published_attributes) do
             {

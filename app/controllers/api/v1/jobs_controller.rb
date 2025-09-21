@@ -13,7 +13,7 @@ class Api::V1::JobsController < ApiController
     @job = Job.new(job_params.except(:published))
     if @job.save
       publish_job
-      render json: @job, status: :created, location: @job
+      render json: @job, status: :created
     else
       render json: @job.errors, status: :unprocessable_content
     end
@@ -35,7 +35,11 @@ class Api::V1::JobsController < ApiController
   end
 
   def filtered_jobs
-    jobs = filter_published? ? Job.published : Job.all
+    jobs = if filter_published?
+      Job.published.includes(company: {logo_attachment: :blob})
+    else
+      Job.all.includes(company: {logo_attachment: :blob})
+    end
     jobs = jobs.where("title ILIKE ? OR location ILIKE ?", "%#{query}%", "%#{query}%") if query.present?
     jobs = jobs.order(sort) if sort.present?
     jobs
